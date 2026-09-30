@@ -13,11 +13,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 /**
  * 結合テスト ログイン機能①
@@ -27,7 +23,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース02 受講生 ログイン 認証失敗")
 public class Case02 {
-	private WebDriver driver;
+
 	
 	/** 前処理 */
 	@BeforeAll
@@ -46,12 +42,11 @@ public class Case02 {
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() throws IOException {
 		// TODO ここに追加
-		ChromeOptions options = new ChromeOptions();
-		driver = new ChromeDriver(options);
-		driver.get("http://localhost:8080/lms");
-		assertEquals("ログイン | LMS", driver.getTitle());
+		webDriver.get("http://localhost:8080/lms");
+		assertEquals("ログイン | LMS", webDriver.getTitle());
 //		File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 //		Files.copy(file.toPath(), Paths.get("./evidence/Case02_access.png"));
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -59,51 +54,45 @@ public class Case02 {
 	@DisplayName("テスト02 DBに登録されていないユーザーでログイン")
 	void test02() throws IOException {
 		// TODO ここに追加
-		WebElement loginpass = driver.findElement(By.name("col-lg-2 control-label"));
-		WebElement loginId = driver.findElement(By.name("loginId"));
-		WebElement loginButton = driver.findElement(By.className("btn btn-primary"));
+		WebElement loginpass = webDriver.findElement(By.id("password"));
+		WebElement loginId = webDriver.findElement(By.id("loginId"));
+		WebElement loginButton = webDriver.findElement(By.cssSelector("input[type='submit']"));
 		
-		try  {
 		
-			loginpass.clear();
-			loginpass.sendKeys("StudentAA01");
-			loginButton.click();
+//		
+//			loginpass.clear();
+//			loginpass.sendKeys("StudentAA01");
+//			loginButton.click();
+//		
+//		
+//		
+//			assertEquals("StudentAA01", loginpass.getAttribute("required"), "エラーメッセージ「ログインIDは必須です。」が表示される。");
+////			File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+////			Files.copy(file.toPath(), Paths.get("./evidence/Case02_notId.png"));
+//			getEvidence(new Object() {});
+//			
+//
+//			
+//			loginId.clear();
+//			loginId.sendKeys("StudentAA01");
+//			loginButton.click();
+//		
+//	
+//		
+//			assertEquals("StudentAA01", loginId.getAttribute("required"), "エラーメッセージ「パスワードは必須です。」が表示される。");
+
 		
-		}catch(Exception e) {
 		
-			assertEquals("StudentAA01", loginpass.getAttribute("required"), "エラーメッセージ「ログインIDは必須です。」が表示される。");
-			File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			Files.copy(file.toPath(), Paths.get("./evidence/Case02_notId.png"));
-			
-		}
-		
-		try  {
-			
-			loginId.clear();
-			loginId.sendKeys("StudentAA01");
-			loginButton.click();
-		
-		}catch(Exception e) {
-		
-			assertEquals("StudentAA01", loginId.getAttribute("required"), "エラーメッセージ「パスワードは必須です。」が表示される。");
-			File file1 = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			Files.copy(file1.toPath(), Paths.get("./evidence/Case02_notPass.png"));
-		
-		}
-		
-		try  {
 			
 			loginpass.sendKeys("aaaa");	
 			loginId.sendKeys("aa0001");
 			loginButton.click();
 		
-		}catch(Exception e) {
-		
-			assertEquals("aaaa", loginId.getAttribute("login"), "エラーメッセージ「ログインに失敗しました。」が表示される。");
-			File file2 = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			Files.copy(file2.toPath(), Paths.get("./evidence/Case02_loginFailed.png"));
-			
-		}
+	
+			WebElement error = webDriver.findElement(By.cssSelector(".help-inline.error"));
+			assertEquals("* ログインに失敗しました。" , error.getText(), "エラーメッセージ「ログインに失敗しました。」が表示される。");
+			getEvidence(new Object() {});
+	
 		
 	}
 

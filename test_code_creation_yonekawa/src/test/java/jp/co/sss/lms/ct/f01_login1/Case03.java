@@ -3,10 +3,7 @@ package jp.co.sss.lms.ct.f01_login1;
 import static jp.co.sss.lms.ct.util.WebDriverUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,12 +13,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 /**
  * 結合テスト ログイン機能①
@@ -31,7 +23,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 @TestMethodOrder(OrderAnnotation.class)
 @DisplayName("ケース03 受講生 ログイン 正常系")
 public class Case03 {
-	private WebDriver driver;
 	
 	/** 前処理 */
 	@BeforeAll
@@ -50,13 +41,9 @@ public class Case03 {
 	@DisplayName("テスト01 トップページURLでアクセス")
 	void test01() throws IOException {
 		// TODO ここに追加
-		ChromeOptions options = new ChromeOptions();
-		driver = new ChromeDriver(options);
-		driver.get("http://localhost:8080/lms");
-		assertEquals("ログイン | LMS", driver.getTitle());
-		
-//		File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-//		Files.copy(file.toPath(), Paths.get("./evidence/Case03_access.png"));
+		webDriver.get("http://localhost:8080/lms");
+		assertEquals("ログイン | LMS", webDriver.getTitle());
+		getEvidence(new Object() {});
 	}
 
 	@Test
@@ -65,19 +52,18 @@ public class Case03 {
 	void test02() throws IOException {
 		// TODO ここに追加
 		try {
-			WebElement loginpass = driver.findElement(By.name("col-lg-2 control-label"));
-			WebElement loginId = driver.findElement(By.name("loginId"));
-			WebElement loginButton = driver.findElement(By.className("btn btn-primary"));
+			WebElement loginpass = webDriver.findElement(By.name("col-lg-2 control-label"));
+			WebElement loginId = webDriver.findElement(By.name("loginId"));
+			WebElement loginButton = webDriver.findElement(By.className("btn btn-primary"));
 		
 			loginpass.clear();
 			loginId.clear();
 			loginId.sendKeys("StudentAA01");
 			loginpass.sendKeys("StudentAA01");
 			loginButton.click();
-			assertEquals("コース詳細 | LMS", driver.getTitle());
+			assertEquals("コース詳細 | LMS",webDriver.getTitle());
 		
-			File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-			Files.copy(file.toPath(), Paths.get("./evidence/Case03_loginSuccessful.png"));
+			getEvidence(new Object() {});
 		
 		}catch(Exception e) {
 			
